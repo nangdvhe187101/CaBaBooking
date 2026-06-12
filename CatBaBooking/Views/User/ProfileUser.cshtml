@@ -1,0 +1,301 @@
+@{
+Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cài đặt tài khoản - Cát Bà Booking</title>
+    <link rel="stylesheet" href="~/css/HomePage/home-style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* ===== PAGE WRAPPER ===== */
+        .account-page { background: #f5f7fb; min-height: 100vh; }
+        .account-container { max-width: 1100px; margin: 0 auto; padding: 36px 24px 64px; }
+
+        /* ===== BREADCRUMB ===== */
+        .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 14px; color: #6b7280; margin-bottom: 28px; }
+        .breadcrumb a { color: #059669; text-decoration: none; font-weight: 500; }
+        .breadcrumb a:hover { text-decoration: underline; }
+        .breadcrumb i { font-size: 10px; color: #9ca3af; }
+
+        /* ===== TRAVELOKA-STYLE 2-COLUMN LAYOUT ===== */
+        .account-layout { display: grid; grid-template-columns: 280px 1fr; gap: 24px; align-items: start; }
+
+        /* ===== LEFT SIDEBAR ===== */
+        .account-sidebar { position: sticky; top: 24px; }
+        .sidebar-profile { background: #fff; border: 1px solid #e5e7eb; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,.05); margin-bottom: 12px; }
+        .sidebar-profile__header { background: linear-gradient(135deg, #059669, #065f46); padding: 24px 20px; text-align: center; }
+        .sidebar-avatar { width: 68px; height: 68px; border-radius: 50%; background: rgba(255,255,255,.2); border: 3px solid rgba(255,255,255,.5); display: flex; align-items: center; justify-content: center; font-size: 26px; color: white; font-weight: 700; margin: 0 auto 12px; }
+        .sidebar-profile__name { color: white; font-size: 16px; font-weight: 700; margin: 0 0 4px; }
+        .sidebar-profile__sub { color: rgba(255,255,255,.75); font-size: 13px; }
+        .sidebar-badge { display: inline-flex; align-items: center; gap: 5px; background: rgba(255,255,255,.15); color: white; font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 999px; margin-top: 10px; }
+
+        /* Sidebar nav */
+        .sidebar-nav { padding: 8px 0; }
+        .sidebar-nav-item { display: flex; align-items: center; gap: 12px; padding: 12px 20px; color: #374151; font-size: 14px; font-weight: 500; text-decoration: none; transition: all .2s; cursor: pointer; border-left: 3px solid transparent; }
+        .sidebar-nav-item i { width: 18px; text-align: center; color: #9ca3af; transition: color .2s; font-size: 15px; }
+        .sidebar-nav-item:hover { background: #f0fdf4; color: #059669; border-left-color: #059669; }
+        .sidebar-nav-item:hover i { color: #059669; }
+        .sidebar-nav-item.is-active { background: #ecfdf5; color: #059669; font-weight: 600; border-left-color: #059669; }
+        .sidebar-nav-item.is-active i { color: #059669; }
+        .sidebar-nav-divider { height: 1px; background: #f3f4f6; margin: 6px 0; }
+        .sidebar-nav-item.logout { color: #dc2626; }
+        .sidebar-nav-item.logout i { color: #dc2626; }
+        .sidebar-nav-item.logout:hover { background: #fef2f2; border-left-color: #dc2626; }
+
+        /* Points row */
+        .sidebar-points { display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; border-top: 1px solid #f3f4f6; }
+        .sidebar-points__label { font-size: 13px; color: #6b7280; display: flex; align-items: center; gap: 8px; }
+        .sidebar-points__value { font-size: 14px; font-weight: 700; color: #111827; }
+
+        /* ===== RIGHT CONTENT ===== */
+        .account-content { min-width: 0; }
+
+        /* Settings Card */
+        .settings-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,.05); }
+
+        /* Tabs */
+        .settings-tabs { display: flex; border-bottom: 1px solid #e5e7eb; background: #fafafa; }
+        .settings-tab { flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 16px; font-weight: 600; font-size: 14px; color: #6b7280; cursor: pointer; border-bottom: 3px solid transparent; transition: all .2s; text-decoration: none; background: none; border-top: none; border-left: none; border-right: none; }
+        .settings-tab:hover { color: #059669; background: #f0fdf4; }
+        .settings-tab.is-active { color: #059669; border-bottom-color: #059669; background: #fff; }
+
+        /* Tab panels */
+        .tab-panel { display: none; padding: 28px 32px; }
+        .tab-panel.is-active { display: block; }
+        .tab-section-title { font-size: 15px; font-weight: 700; color: #111827; margin: 0 0 18px; display: flex; align-items: center; gap: 8px; }
+        .tab-section-title i { color: #059669; }
+
+        /* Field grid */
+        .field-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px 22px; }
+        .field { display: flex; flex-direction: column; gap: 6px; }
+        .field.full { grid-column: 1 / -1; }
+        .field label { font-size: 13px; font-weight: 600; color: #374151; }
+        .field input, .field select { padding: 11px 14px; border: 1.5px solid #e5e7eb; border-radius: 10px; font-size: 14px; font-family: inherit; background: #fff; transition: border .2s, box-shadow .2s; color: #111827; }
+        .field input:focus, .field select:focus { border-color: #059669; box-shadow: 0 0 0 3px rgba(5,150,105,.12); outline: none; }
+        .field input::placeholder { color: #9ca3af; }
+
+        /* DOB row */
+        .dob-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+        /* Divider */
+        .section-divider { border: none; border-top: 1px solid #f3f4f6; margin: 24px 0; }
+
+        /* Actions */
+        .form-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px; padding-top: 20px; border-top: 1px solid #f3f4f6; }
+        .btn { display: inline-flex; align-items: center; gap: 7px; padding: 11px 22px; border-radius: 10px; font-weight: 600; font-size: 14px; cursor: pointer; border: none; transition: all .2s; text-decoration: none; }
+        .btn-ghost { background: #fff; border: 1.5px solid #e5e7eb; color: #374151; }
+        .btn-ghost:hover { border-color: #9ca3af; color: #111827; }
+        .btn-primary { background: #059669; color: #fff; box-shadow: 0 4px 14px rgba(5,150,105,.3); }
+        .btn-primary:hover { background: #047857; transform: translateY(-1px); }
+
+        /* Danger zone */
+        .danger-zone { border: 1.5px solid #fee2e2; border-radius: 12px; padding: 18px 20px; margin-top: 24px; background: #fff5f5; }
+        .danger-zone h4 { color: #dc2626; font-size: 14px; font-weight: 700; margin: 0 0 6px; display: flex; align-items: center; gap: 7px; }
+        .danger-zone p { color: #6b7280; font-size: 13px; margin: 0 0 14px; }
+        .btn-danger { background: #fff; color: #dc2626; border: 1.5px solid #fca5a5; font-size: 14px; font-weight: 600; padding: 9px 18px; border-radius: 8px; cursor: pointer; transition: all .2s; display: inline-flex; align-items: center; gap: 7px; }
+        .btn-danger:hover { background: #fef2f2; border-color: #dc2626; }
+
+        @@media (max-width: 900px) { .account-layout { grid-template-columns: 1fr; } .account-sidebar { position: static; } }
+        @@media (max-width: 640px) { .field-grid { grid-template-columns: 1fr; } .dob-row { grid-template-columns: 1fr; } .tab-panel { padding: 20px; } }
+    </style>
+</head>
+<body>
+
+@await Html.PartialAsync("Sidebar")
+
+<div class="account-page">
+    <div class="account-container">
+
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb">
+            <a href="/home-page"><i class="fas fa-home"></i> Trang chủ</a>
+            <i class="fas fa-chevron-right"></i>
+            <span>Tài khoản</span>
+            <i class="fas fa-chevron-right"></i>
+            <span>Cài đặt</span>
+        </nav>
+
+        <div class="account-layout">
+
+            <!-- ===== LEFT SIDEBAR ===== -->
+            <aside class="account-sidebar">
+                <div class="sidebar-profile">
+                    <div class="sidebar-profile__header">
+                        <div class="sidebar-avatar">VN</div>
+                        <p class="sidebar-profile__name">Nguyễn Văn A</p>
+                        <p class="sidebar-profile__sub">nguyenvana@email.com</p>
+                        <div class="sidebar-badge"><i class="fas fa-medal"></i> Bronze Priority</div>
+                    </div>
+
+                    <div class="sidebar-points">
+                        <span class="sidebar-points__label"><i class="fas fa-coins" style="color:#d97706;"></i> Điểm thưởng</span>
+                        <span class="sidebar-points__value">0 điểm</span>
+                    </div>
+
+                    <nav class="sidebar-nav">
+                        <a href="/my-booking" class="sidebar-nav-item">
+                            <i class="fas fa-calendar-check"></i> Đặt chỗ của tôi
+                        </a>
+                        <a href="#" class="sidebar-nav-item">
+                            <i class="fas fa-list-alt"></i> Danh sách giao dịch
+                        </a>
+                        <a href="#" class="sidebar-nav-item">
+                            <i class="fas fa-undo-alt"></i> Thanh toán &amp; Hoàn tiền
+                        </a>
+                        <a href="#" class="sidebar-nav-item">
+                            <i class="fas fa-bell"></i> Thông báo giá vé
+                        </a>
+                        <a href="#" class="sidebar-nav-item">
+                            <i class="fas fa-users"></i> Hành khách đã lưu
+                        </a>
+                        <a href="#" class="sidebar-nav-item">
+                            <i class="fas fa-sliders-h"></i> Cài đặt thông báo
+                        </a>
+                        <div class="sidebar-nav-divider"></div>
+                        <a href="/profile" class="sidebar-nav-item is-active">
+                            <i class="fas fa-cog"></i> Tài khoản
+                        </a>
+                        <div class="sidebar-nav-divider"></div>
+                        <a href="#" class="sidebar-nav-item logout" onclick="return confirm('Bạn có chắc muốn đăng xuất?')">
+                            <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                        </a>
+                    </nav>
+                </div>
+            </aside>
+
+            <!-- ===== RIGHT CONTENT ===== -->
+            <main class="account-content">
+                <div class="settings-card">
+
+                    <!-- Tabs -->
+                    <div class="settings-tabs">
+                        <button class="settings-tab is-active" onclick="switchTab('account')">
+                            <i class="fas fa-user"></i> Thông tin tài khoản
+                        </button>
+                        <button class="settings-tab" onclick="switchTab('security')">
+                            <i class="fas fa-shield-alt"></i> Mật khẩu &amp; Bảo mật
+                        </button>
+                    </div>
+
+                    <!-- Account Tab -->
+                    <div class="tab-panel is-active" id="tab-account">
+                        <form action="#" method="post">
+                            <p class="tab-section-title"><i class="fas fa-user-circle"></i> Dữ liệu cá nhân</p>
+                            <div class="field-grid">
+                                <div class="field full">
+                                    <label>Tên đầy đủ</label>
+                                    <input type="text" name="fullName" value="Nguyễn Văn A" placeholder="Họ và tên" required>
+                                    <span style="font-size:12px;color:#9ca3af;">Tên trong hồ sơ được rút ngắn từ họ tên của bạn.</span>
+                                </div>
+                                <div class="field">
+                                    <label>Giới tính</label>
+                                    <select name="gender">
+                                        <option value="">Chọn giới tính</option>
+                                        <option value="male" selected>Nam</option>
+                                        <option value="female">Nữ</option>
+                                        <option value="other">Khác</option>
+                                    </select>
+                                </div>
+                                <div class="field">
+                                    <label>Ngày sinh</label>
+                                    <div class="dob-row">
+                                        <select name="birthDay">
+                                            <option value="">Ngày</option>
+                                            <option value="15" selected>15</option>
+                                        </select>
+                                        <select name="birthMonth">
+                                            <option value="">Tháng</option>
+                                            <option value="6" selected>Tháng 6</option>
+                                        </select>
+                                        <select name="birthYear">
+                                            <option value="">Năm</option>
+                                            <option value="1995" selected>1995</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="field full">
+                                    <label>Thành phố cư trú</label>
+                                    <input type="text" name="city" placeholder="Thành phố cư trú">
+                                </div>
+                            </div>
+
+                            <hr class="section-divider">
+                            <p class="tab-section-title"><i class="fas fa-address-book"></i> Thông tin liên hệ</p>
+                            <div class="field-grid">
+                                <div class="field">
+                                    <label>Số điện thoại</label>
+                                    <input type="text" name="phone" value="0912 345 678" placeholder="09xxxxxxxx" required>
+                                </div>
+                                <div class="field">
+                                    <label>Email</label>
+                                    <input type="email" name="email" value="nguyenvana@email.com" placeholder="email@example.com" required>
+                                </div>
+                                <div class="field full">
+                                    <label>Địa chỉ</label>
+                                    <input type="text" name="personalAddress" value="123 Đường ABC, Quận 1" placeholder="Số nhà, đường, phường/xã...">
+                                </div>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-ghost"><i class="fas fa-times"></i> Có lẽ để sau</button>
+                                <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Lưu</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Security Tab -->
+                    <div class="tab-panel" id="tab-security">
+                        <form action="#" method="post">
+                            <p class="tab-section-title"><i class="fas fa-shield-alt"></i> Đổi mật khẩu</p>
+                            <div class="field-grid">
+                                <div class="field full">
+                                    <label>Mật khẩu hiện tại</label>
+                                    <input type="password" name="currentPassword" placeholder="Nhập mật khẩu hiện tại" required>
+                                </div>
+                                <div class="field">
+                                    <label>Mật khẩu mới</label>
+                                    <input type="password" name="newPassword" placeholder="Ít nhất 8 ký tự" required>
+                                </div>
+                                <div class="field">
+                                    <label>Xác nhận mật khẩu mới</label>
+                                    <input type="password" name="confirmPassword" placeholder="Nhập lại mật khẩu mới" required>
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-ghost" onclick="switchTab('account')"><i class="fas fa-arrow-left"></i> Quay lại</button>
+                                <button type="submit" class="btn btn-primary"><i class="fas fa-lock"></i> Đổi mật khẩu</button>
+                            </div>
+                        </form>
+
+                        <div class="danger-zone">
+                            <h4><i class="fas fa-exclamation-triangle"></i> Vùng nguy hiểm</h4>
+                            <p>Xóa tài khoản sẽ xóa vĩnh viễn tất cả dữ liệu của bạn. Hành động này không thể hoàn tác.</p>
+                            <button class="btn-danger" onclick="return confirm('Bạn chắc chắn muốn xóa tài khoản?')">
+                                <i class="fas fa-trash-alt"></i> Xóa tài khoản
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </main>
+
+        </div><!-- /account-layout -->
+    </div><!-- /account-container -->
+</div><!-- /account-page -->
+
+@await Html.PartialAsync("Footer")
+
+<script>
+    function switchTab(tab) {
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('is-active'));
+        document.querySelectorAll('.settings-tab').forEach(t => t.classList.remove('is-active'));
+        document.getElementById('tab-' + tab).classList.add('is-active');
+        document.querySelectorAll('.settings-tab')[tab === 'account' ? 0 : 1].classList.add('is-active');
+    }
+</script>
+</body>
+</html>

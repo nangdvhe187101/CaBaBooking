@@ -1,0 +1,343 @@
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết Booking - Cát Bà Booking</title>
+    <link rel="stylesheet" href="~/css/HomePage/home-style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* ===== PAGE WRAPPER ===== */
+        .account-page { background: #f5f7fb; min-height: 100vh; }
+        .account-container { max-width: 1200px; margin: 0 auto; padding: 36px 24px 64px; }
+
+        /* ===== BREADCRUMB ===== */
+        .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 14px; color: #6b7280; margin-bottom: 28px; }
+        .breadcrumb a { color: #059669; text-decoration: none; font-weight: 500; }
+        .breadcrumb a:hover { text-decoration: underline; }
+        .breadcrumb i.sep { font-size: 10px; color: #9ca3af; }
+
+        /* ===== OUTER 2-COLUMN: sidebar + content ===== */
+        .account-layout { display: grid; grid-template-columns: 280px 1fr; gap: 24px; align-items: start; }
+
+        /* ===== LEFT SIDEBAR ===== */
+        .account-sidebar { position: sticky; top: 24px; }
+        .sidebar-profile { background: #fff; border: 1px solid #e5e7eb; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,.05); }
+        .sidebar-profile__header { background: linear-gradient(135deg, #059669, #065f46); padding: 24px 20px; text-align: center; }
+        .sidebar-avatar { width: 68px; height: 68px; border-radius: 50%; background: rgba(255,255,255,.2); border: 3px solid rgba(255,255,255,.5); display: flex; align-items: center; justify-content: center; font-size: 26px; color: white; font-weight: 700; margin: 0 auto 12px; }
+        .sidebar-profile__name { color: white; font-size: 16px; font-weight: 700; margin: 0 0 4px; }
+        .sidebar-profile__sub { color: rgba(255,255,255,.75); font-size: 13px; }
+        .sidebar-badge { display: inline-flex; align-items: center; gap: 5px; background: rgba(255,255,255,.15); color: white; font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 999px; margin-top: 10px; }
+        .sidebar-points { display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; border-top: 1px solid #f3f4f6; }
+        .sidebar-points__label { font-size: 13px; color: #6b7280; display: flex; align-items: center; gap: 8px; }
+        .sidebar-points__value { font-size: 14px; font-weight: 700; color: #111827; }
+        .sidebar-nav { padding: 8px 0; }
+        .sidebar-nav-item { display: flex; align-items: center; gap: 12px; padding: 12px 20px; color: #374151; font-size: 14px; font-weight: 500; text-decoration: none; transition: all .2s; border-left: 3px solid transparent; }
+        .sidebar-nav-item i { width: 18px; text-align: center; color: #9ca3af; transition: color .2s; font-size: 15px; }
+        .sidebar-nav-item:hover { background: #f0fdf4; color: #059669; border-left-color: #059669; }
+        .sidebar-nav-item:hover i { color: #059669; }
+        .sidebar-nav-item.is-active { background: #ecfdf5; color: #059669; font-weight: 600; border-left-color: #059669; }
+        .sidebar-nav-item.is-active i { color: #059669; }
+        .sidebar-nav-divider { height: 1px; background: #f3f4f6; margin: 6px 0; }
+        .sidebar-nav-item.logout { color: #dc2626; }
+        .sidebar-nav-item.logout i { color: #dc2626; }
+        .sidebar-nav-item.logout:hover { background: #fef2f2; border-left-color: #dc2626; }
+
+        /* ===== RIGHT CONTENT ===== */
+        .account-content { min-width: 0; }
+
+        /* Inner detail layout: main left + summary right */
+        .detail-layout { display: grid; grid-template-columns: 1fr 320px; gap: 20px; align-items: start; }
+
+        /* Cards */
+        .card { background: #fff; border: 1px solid #e5e7eb; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,.05); margin-bottom: 18px; }
+        .card__header { display: flex; align-items: center; gap: 12px; padding: 16px 22px; border-bottom: 1px solid #f3f4f6; background: #fafafa; }
+        .card__header-icon { width: 34px; height: 34px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 15px; background: #ecfdf5; color: #059669; flex-shrink: 0; }
+        .card__header-title { font-size: 15px; font-weight: 700; color: #111827; }
+        .card__body { padding: 22px; }
+
+        /* Info grid */
+        .info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+        .info-item__label { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: #9ca3af; font-weight: 600; }
+        .info-item__value { font-size: 14px; font-weight: 600; color: #111827; margin-top: 4px; }
+
+        /* Status badge */
+        .status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 999px; font-size: 12px; font-weight: 600; }
+        .status-badge.confirmed { background: #ecfdf5; color: #065f46; }
+        .status-badge .dot { width: 7px; height: 7px; border-radius: 50%; background: #059669; }
+
+        /* Summary sidebar */
+        .summary-sticky { position: sticky; top: 24px; }
+        .summary-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,.05); margin-bottom: 14px; }
+        .summary-card__top { background: linear-gradient(135deg, #059669, #065f46); padding: 18px 20px; color: white; }
+        .summary-card__top h3 { margin: 0 0 4px; font-size: 16px; font-weight: 700; }
+        .summary-card__top p { margin: 0; font-size: 13px; opacity: .85; }
+        .summary-card__body { padding: 18px 20px; }
+        .summary-row { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px solid #f3f4f6; font-size: 13px; }
+        .summary-row:last-child { border-bottom: none; }
+        .summary-row__label { color: #6b7280; display: flex; align-items: center; gap: 7px; }
+        .summary-row__value { font-weight: 600; color: #111827; }
+        .summary-total { display: flex; justify-content: space-between; align-items: center; padding: 14px 20px; background: #f0fdf4; border-top: 2px solid #d1fae5; }
+        .summary-total__label { font-weight: 700; color: #111827; }
+        .summary-total__value { font-size: 20px; font-weight: 700; color: #059669; }
+
+        /* Star rating */
+        .rating-stars { display: flex; gap: 6px; flex-direction: row-reverse; justify-content: flex-end; }
+        .rating-stars input[type="radio"] { display: none; }
+        .rating-stars label { font-size: 30px; color: #d1d5db; cursor: pointer; transition: color .15s; line-height: 1; }
+        .rating-stars input[type="radio"]:checked ~ label,
+        .rating-stars label:hover,
+        .rating-stars label:hover ~ label { color: #f59e0b; }
+
+        /* Feedback form */
+        .form-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+        .form-group label { font-size: 13px; font-weight: 600; color: #374151; }
+        .form-group textarea { padding: 12px 14px; border: 1.5px solid #e5e7eb; border-radius: 10px; font-family: inherit; font-size: 14px; min-height: 100px; resize: vertical; transition: border .2s; }
+        .form-group textarea:focus { border-color: #059669; outline: none; box-shadow: 0 0 0 3px rgba(5,150,105,.12); }
+        .btn-submit { display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: #059669; color: #fff; border: none; padding: 11px 22px; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 14px; width: 100%; transition: background .2s; }
+        .btn-submit:hover { background: #047857; }
+
+        /* Back button */
+        .btn-back { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px; background: #fff; border: 1.5px solid #e5e7eb; border-radius: 12px; color: #374151; font-weight: 600; font-size: 14px; text-decoration: none; transition: border-color .2s; }
+        .btn-back:hover { border-color: #059669; color: #059669; }
+        .btn-back i { color: #059669; }
+
+        /* Divider */
+        .divider { border: none; border-top: 1px solid #f3f4f6; margin: 0; }
+
+        @@media (max-width: 900px) { .account-layout { grid-template-columns: 1fr; } .account-sidebar { position: static; } }
+        @@media (max-width: 768px) { .detail-layout { grid-template-columns: 1fr; } .summary-sticky { position: static; } .info-grid { grid-template-columns: 1fr 1fr; } }
+        @@media (max-width: 480px) { .info-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+@await Html.PartialAsync("Sidebar")
+
+<div class="account-page">
+    <div class="account-container">
+
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb">
+            <a href="/home-page"><i class="fas fa-home"></i> Trang chủ</a>
+            <i class="fas fa-chevron-right sep"></i>
+            <a href="/my-booking">Đặt chỗ của tôi</a>
+            <i class="fas fa-chevron-right sep"></i>
+            <span>Chi tiết #CB2025001</span>
+        </nav>
+
+        <div class="account-layout">
+
+            <!-- ===== LEFT SIDEBAR ===== -->
+            <aside class="account-sidebar">
+                <div class="sidebar-profile">
+                    <div class="sidebar-profile__header">
+                        <div class="sidebar-avatar">VN</div>
+                        <p class="sidebar-profile__name">Nguyễn Văn A</p>
+                        <p class="sidebar-profile__sub">nguyenvana@email.com</p>
+                        <div class="sidebar-badge"><i class="fas fa-medal"></i> Bronze Priority</div>
+                    </div>
+
+                    <div class="sidebar-points">
+                        <span class="sidebar-points__label"><i class="fas fa-coins" style="color:#d97706;"></i> Điểm thưởng</span>
+                        <span class="sidebar-points__value">0 điểm</span>
+                    </div>
+
+                    <nav class="sidebar-nav">
+                        <a href="/my-bookings" class="sidebar-nav-item is-active">
+                            <i class="fas fa-calendar-check"></i> Đặt chỗ của tôi
+                        </a>
+                        <a href="#" class="sidebar-nav-item">
+                            <i class="fas fa-list-alt"></i> Danh sách giao dịch
+                        </a>
+                        <a href="#" class="sidebar-nav-item">
+                            <i class="fas fa-undo-alt"></i> Thanh toán &amp; Hoàn tiền
+                        </a>
+                        <a href="#" class="sidebar-nav-item">
+                            <i class="fas fa-bell"></i> Thông báo giá vé
+                        </a>
+                        <a href="#" class="sidebar-nav-item">
+                            <i class="fas fa-users"></i> Hành khách đã lưu
+                        </a>
+                        <a href="#" class="sidebar-nav-item">
+                            <i class="fas fa-sliders-h"></i> Cài đặt thông báo
+                        </a>
+                        <div class="sidebar-nav-divider"></div>
+                        <a href="/profile" class="sidebar-nav-item">
+                            <i class="fas fa-cog"></i> Tài khoản
+                        </a>
+                        <div class="sidebar-nav-divider"></div>
+                        <a href="#" class="sidebar-nav-item logout" onclick="return confirm('Bạn có chắc muốn đăng xuất?')">
+                            <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                        </a>
+                    </nav>
+                </div>
+            </aside>
+
+            <!-- ===== RIGHT CONTENT ===== -->
+            <main class="account-content">
+                <div class="detail-layout">
+
+                    <!-- LEFT: Detail cards -->
+                    <div>
+                        <!-- Booking Info Card -->
+                        <div class="card">
+                            <div class="card__header">
+                                <div class="card__header-icon"><i class="fas fa-info-circle"></i></div>
+                                <div class="card__header-title">Thông tin đặt chỗ</div>
+                                <span class="status-badge confirmed" style="margin-left:auto;"><span class="dot"></span> Đã xác nhận</span>
+                            </div>
+                            <div class="card__body">
+                                <div class="info-grid">
+                                    <div class="info-item">
+                                        <div class="info-item__label"><i class="fas fa-hashtag"></i> Mã booking</div>
+                                        <div class="info-item__value">#CB2025001</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-item__label"><i class="fas fa-home"></i> Loại dịch vụ</div>
+                                        <div class="info-item__value">Homestay</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-item__label"><i class="fas fa-calendar-check"></i> Ngày nhận phòng</div>
+                                        <div class="info-item__value">15/06/2025</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-item__label"><i class="fas fa-calendar-times"></i> Ngày trả phòng</div>
+                                        <div class="info-item__value">18/06/2025</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-item__label"><i class="fas fa-moon"></i> Số đêm</div>
+                                        <div class="info-item__value">3 đêm</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-item__label"><i class="fas fa-users"></i> Số khách</div>
+                                        <div class="info-item__value">2 người</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-item__label"><i class="fas fa-bed"></i> Loại phòng</div>
+                                        <div class="info-item__value">Deluxe View Biển</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-item__label"><i class="fas fa-map-marker-alt"></i> Địa điểm</div>
+                                        <div class="info-item__value">Cát Cò 1, Cát Bà, Hải Phòng</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Guest Info Card -->
+                        <div class="card">
+                            <div class="card__header">
+                                <div class="card__header-icon"><i class="fas fa-user"></i></div>
+                                <div class="card__header-title">Thông tin khách hàng</div>
+                            </div>
+                            <div class="card__body">
+                                <div class="info-grid">
+                                    <div class="info-item">
+                                        <div class="info-item__label"><i class="fas fa-user"></i> Họ và tên</div>
+                                        <div class="info-item__value">Nguyễn Văn A</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-item__label"><i class="fas fa-envelope"></i> Email</div>
+                                        <div class="info-item__value">nguyenvana@email.com</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-item__label"><i class="fas fa-phone"></i> Số điện thoại</div>
+                                        <div class="info-item__value">0912 345 678</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-item__label"><i class="fas fa-users"></i> Số khách</div>
+                                        <div class="info-item__value">2 người</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Feedback Card -->
+                        <div class="card">
+                            <div class="card__header">
+                                <div class="card__header-icon" style="background:#fffbeb;color:#d97706;"><i class="fas fa-star"></i></div>
+                                <div class="card__header-title">Đánh giá dịch vụ</div>
+                            </div>
+                            <div class="card__body">
+                                <form action="#" method="post">
+                                    <input type="hidden" name="bookingId" value="1">
+                                    <div class="form-group">
+                                        <label>Xếp hạng sao</label>
+                                        <div class="rating-stars">
+                                            <input type="radio" id="star5" name="rating" value="5"><label for="star5">★</label>
+                                            <input type="radio" id="star4" name="rating" value="4"><label for="star4">★</label>
+                                            <input type="radio" id="star3" name="rating" value="3"><label for="star3">★</label>
+                                            <input type="radio" id="star2" name="rating" value="2"><label for="star2">★</label>
+                                            <input type="radio" id="star1" name="rating" value="1"><label for="star1">★</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="comment">Nội dung đánh giá</label>
+                                        <textarea id="comment" name="comment" placeholder="Chia sẻ trải nghiệm của bạn tại Cát Bà..."></textarea>
+                                    </div>
+                                    <button type="submit" class="btn-submit"><i class="fas fa-paper-plane"></i> Gửi đánh giá</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- RIGHT: Summary + Back -->
+                    <div class="summary-sticky">
+                        <div class="summary-card">
+                            <div class="summary-card__top">
+                                <h3>Homestay Ocean View Cát Bà</h3>
+                                <p><i class="fas fa-map-marker-alt"></i> Cát Cò 1, Cát Bà, Hải Phòng</p>
+                            </div>
+                            <div class="summary-card__body">
+                                <div class="summary-row">
+                                    <span class="summary-row__label"><i class="fas fa-calendar-check"></i> Nhận phòng</span>
+                                    <span class="summary-row__value">15/06/2025</span>
+                                </div>
+                                <div class="summary-row">
+                                    <span class="summary-row__label"><i class="fas fa-calendar-times"></i> Trả phòng</span>
+                                    <span class="summary-row__value">18/06/2025</span>
+                                </div>
+                                <div class="summary-row">
+                                    <span class="summary-row__label"><i class="fas fa-moon"></i> Số đêm</span>
+                                    <span class="summary-row__value">3 đêm</span>
+                                </div>
+                                <div class="summary-row">
+                                    <span class="summary-row__label"><i class="fas fa-users"></i> Số khách</span>
+                                    <span class="summary-row__value">2 người</span>
+                                </div>
+                                <div class="summary-row">
+                                    <span class="summary-row__label"><i class="fas fa-bed"></i> Loại phòng</span>
+                                    <span class="summary-row__value">Deluxe View Biển</span>
+                                </div>
+                                <div class="summary-row">
+                                    <span class="summary-row__label"><i class="fas fa-tag"></i> Đơn giá</span>
+                                    <span class="summary-row__value">850,000₫/đêm</span>
+                                </div>
+                            </div>
+                            <div class="summary-total">
+                                <span class="summary-total__label">Tổng cộng</span>
+                                <span class="summary-total__value">2,550,000₫</span>
+                            </div>
+                        </div>
+
+                        <a href="/my-bookings" class="btn-back">
+                            <i class="fas fa-arrow-left"></i> Quay lại danh sách
+                        </a>
+                    </div>
+
+                </div><!-- /detail-layout -->
+            </main>
+
+        </div><!-- /account-layout -->
+    </div><!-- /account-container -->
+</div><!-- /account-page -->
+
+@await Html.PartialAsync("Footer")
+
+</body>
+</html>
