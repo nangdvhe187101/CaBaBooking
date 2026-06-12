@@ -1,3 +1,6 @@
+using CatBaBooking.Models;
+using Microsoft.EntityFrameworkCore;
+
 namespace CatBaBooking;
 
 public class Program
@@ -8,9 +11,16 @@ public class Program
 
         // Add services to the container.
         builder.Services.AddControllersWithViews();
-
+        builder.Services.AddDbContext<CatBaBookingContext>();
+        builder.Services.AddDbContext<CatBaBookingContext>(options =>
+            options.UseSqlServer(builder.Configuration.GetConnectionString("MyCnn")));
         var app = builder.Build();
-
+        builder.Services.AddSession(options =>
+        {
+            options.IdleTimeout = TimeSpan.FromMinutes(30);
+            options.Cookie.HttpOnly = true;
+            options.Cookie.IsEssential = true;
+        });
         // Configure the HTTP request pipeline.
         if (!app.Environment.IsDevelopment())
         {
@@ -21,7 +31,7 @@ public class Program
 
         app.UseHttpsRedirection();
         app.UseRouting();
-
+        app.UseSession();
         app.UseAuthorization();
 
         app.MapStaticAssets();
